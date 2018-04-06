@@ -5,31 +5,27 @@ function [ velocity ] = ShouldItMove( t, positions, charge, center, ProbScat, Pr
 k = physconst('Boltzmann'); %Use of constants in matlab
 T = 300; % temperature in Kalvin
 v_th = sqrt(k*T/mass);
-minSep = 0.1e-9; %0.1 nm seperation for Foreces to effect particle
-kcon = 9e9;
 
-for n =1:length(positions)-1
-    rx = abs(positions(n,1)-positions(:,1));
-    ry = abs(positions(n,2)-positions(:,2));
-    rxo = abs(positions(n,1)-positionsOther(:,1));
-    ryo = abs(positions(n,2)-positionsOther(:,2));
-end
-
-for n=1:length(positions)-1
-    if rx(n) <= minSep && ry(n) <=minSep
-        
-        accel = (kcon.*charge.^2)/(mass.*sqrt(rx(n)^2+ry(n)^2));
-        velocity(n, :) = velocity(n, :) + accel.*t;
-        positions(n, :) = positions(n, :) + velocity(n, :)*t;
-        
-    elseif rxo(n) <= minSep && ryo(n) <=minSep
-        accel = (kcon.*charge.*chargeOther)./(mass.*sqrt(rx(n)^2+ry(n)^2));
-        velocity(n, :) = velocity(n, :) + accel*t;
-        positions(n, :) = positions(n, :) + velocity(n, :)*t;
-        
-    else
-        
-        prob = rand();
+for j=1:2
+for n =1:length(positions)
+    rx(n) = abs(positions(n,1)-positions(:,1));
+    ry(n) = abs(positions(n,2)-positions(:,2));
+    rxo(n) = abs(positions(n,1)-positionsOther(:,1)); 
+    ryo(n) = abs(positions(n,2)-positionsOther(:,2)); 
+    
+if rx <= minSep && ry<=minSep
+    
+    accel = (kcon*charge^2)/(mass*sqrt(rx^2+ry^2));
+    velocity(n, :) = velocity(n, :) + accel*t;
+    positions(n, j) = positions(n, j) + velocity(n, j)*t;
+elseif rxo <= minSep && ryo <=minSep
+    accel = (kcon*charge*chargeOther)/(mass*sqrt(rx^2+ry^2));
+    velocity(n, :) = velocity(n, :) + accel*t;
+    positions(n, j) = positions(n, j) + velocity(n, j)*t;
+    
+else
+    
+       prob = rand();
         if ProbScat > prob
             %rethermalize the particle's velocity by assigning new Vx
             %and Vy from the MB distribution
@@ -80,7 +76,5 @@ for n=1:length(positions)-1
             end
         end
     end
-end
-
 end
 
