@@ -158,6 +158,14 @@ ProbMoveWhenHappy = 0.1;
 iterations = 20;
 
 v = VideoWriter('try1.avi');
+figure (4)
+axis([xmin, xmaxNano, ymin, ymaxNano])
+plot(posN(:, 1), posN(:, 2), '.b')
+hold on
+plot(posP(:, 1), posN(:, 2), '.r')
+hold off
+pause(0.2)
+title ('Simulation of Electron Trajectories')
 
 for iter =1:iterations
     scatterTime= scatterTime+t*iter;
@@ -172,37 +180,7 @@ for iter =1:iterations
     posN = updatePosition( numP, posN, velN, t, xmin, xmaxNano, ymin, ymaxNano);
     posP = updatePosition( numP, posP, velP, t, xmin, xmaxNano, ymin, ymaxNano);
     
-    %Boundary conditions
-    for j=1:2
-        for k=1:numP
-            
-            %move particles a each time step based on their velocity
-            posN(k, j) = posN(k, j) + velN(k, j)*t;
-            
-            %restrications of x-cordinate of each particle BC
-            if j == 1 %(for all x cordinates)
-                if posN(k, 1) <= xmin
-                    
-                    posN(k, 1) = xmaxNano + velN(k, 1)*t;
-                    
-                elseif posN(k, 1)>= xmaxNano
-                    
-                    posN(k, 1)= xmin + velN(k, 1)*t;
-                    
-                end
-            end
-            
-            %y parmaters of region BC reflective
-            if j == 2
-                if (posN(k, 2) <= ymin || posN(k, 2) >= ymaxNano) %---&& %engery less than required to penetrate
-                    velN(k, 2) = -1*velN(k, 2);%just negate y component fr reflection
-                    
-                end
-            end
-            
-        end
-    end
-    
+
     
     figure (4)
     axis([xmin, xmaxNano, ymin, ymaxNano])
