@@ -13,7 +13,7 @@ T = 300; % temperature in Kalvin
 %https://en.wikipedia.org/wiki/Thermal_velocity)
 v_th = sqrt(k*T/mass);
 
-numP = 20; %number of particles
+numP = 100; %number of particles
 
 %box definitions
 xmax = 75;
@@ -44,19 +44,20 @@ ymaxNano = 50e-9;
 
 
 %Probability of scattering
-ProbScat = 1; %1- exp(-t/TauMN);
+ProbScat = 1- exp(-t/TauMN);
 scatterTime = zeros(numP, 1);
 ProbMoveWhenHappy = 0.1;
 iterations = 20;
 
 figure (4)
-axis([xmin, xmaxNano, ymin, ymaxNano])
 plot(posN(:, 1), posN(:, 2), '.b')
 hold on
 plot(posP(:, 1), posN(:, 2), '.r')
 hold off
 pause(0.2)
 title ('Simulation of Electron Trajectories')
+axis([xmin, xmaxNano, ymin, ymaxNano])
+
 
 for iter =1:iterations
     scatterTime= scatterTime+t*iter;
@@ -86,19 +87,19 @@ for iter =1:iterations
     
     CondMapUpdated = ConductivityCal(posN, 'electron', numP);
     
-%     figure(5)
-%     subplot(1, 2, 1)
-%     surf(CondMapUpdated)
-%     title ('Conductivity map changes with time')
-%     colorbar
-%     subplot(1, 2, 2)
-%     plot(posN(1:length(posN), 1), posN(1:length(posN), 2), '.b')
-%     hold on
-%     plot(posP(1:length(posP), 1), posN(1:length(posP), 2), '.r')
-%     axis([xmin, xmaxNano, ymin, ymaxNano])
-%     pause(0.2)
-%     title ('Simulation of Electron Trajectories')
-%     
+    figure(5)
+    subplot(1, 2, 1)
+    surf(CondMapUpdated)
+    title ('Conductivity map changes with time')
+    colorbar
+    subplot(1, 2, 2)
+    plot(posN(1:length(posN), 1), posN(1:length(posN), 2), '.b')
+    hold on
+    plot(posP(1:length(posP), 1), posN(1:length(posP), 2), '.r')
+    axis([xmin, xmaxNano, ymin, ymaxNano])
+    pause(0.2)
+    title ('Simulation of Electron Trajectories')
+    
     
     %temperature map
     %convert velocieites into temperatures, then use hist3 to bin and plot
