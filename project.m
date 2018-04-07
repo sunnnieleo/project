@@ -2,8 +2,8 @@
 
 %define electron parameters
 mass = 9.109E-31; %in kg
-chargeN = -1602E-19; %in C
-chargeP = 1602E-19; %in C
+chargeN = -1.602E-19; %in C
+chargeP = 1.602E-19; %in C
 TauMN = 0.2E-12;
 
 k = physconst('Boltzmann'); %Use of constants in matlab
